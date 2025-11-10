@@ -1,10 +1,11 @@
-// scripts.js - final for Daniele: rotator, reveal, carousel loop (2 visible), animations
+// scripts.js — versão com animações aprimoradas + botões animados
 document.addEventListener('DOMContentLoaded', () => {
-  // year
+
+  /* ====== Atualiza ano ====== */
   const yearEl = document.getElementById('year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-  // rotator phrases
+  /* ====== Frases rotativas ====== */
   const phrases = [
     'Detalhes que realçam, resultados que surpreendem.',
     'Técnica, sensibilidade e resultado.',
@@ -15,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (rotEl) {
     rotEl.textContent = phrases[0];
     setInterval(() => {
+      rotEl.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
       rotEl.style.opacity = 0;
       rotEl.style.transform = 'translateY(-8px)';
       setTimeout(() => {
@@ -22,11 +24,11 @@ document.addEventListener('DOMContentLoaded', () => {
         rotEl.textContent = phrases[pIdx];
         rotEl.style.opacity = 1;
         rotEl.style.transform = 'translateY(0)';
-      }, 360);
+      }, 400);
     }, 3200);
   }
 
-  // reveal on scroll
+  /* ====== Animação “reveal” ao rolar ====== */
   const io = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -36,130 +38,122 @@ document.addEventListener('DOMContentLoaded', () => {
         io.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.12 });
-  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  }, { threshold: 0.15 });
 
-  /* ---------------- CAROUSEL (2 visible, loop via clones) ---------------- */
+  document.querySelectorAll('.reveal').forEach(el => {
+    el.style.opacity = 0;
+    el.style.transform = 'translateY(30px)';
+    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    io.observe(el);
+  });
+
+  /* ====== Carrossel de serviços (2 visíveis) ====== */
   const track = document.getElementById('carousel-track');
-  const prevBtn = document.getElementById('prev');
   const nextBtn = document.getElementById('next');
-  if (!track) return;
+  const prevBtn = document.getElementById('prev');
 
-  // keep original nodes as templates
-  const originalNodes = Array.from(track.children).map(n => n.cloneNode(true));
-  const totalOriginal = originalNodes.length;
-  let visibleCount = 2; // fixed 2 per view (as requested)
-  let clonesPerSide = visibleCount;
-  let currentIndex = clonesPerSide;
-  let isAnimating = false;
+  if (track && nextBtn && prevBtn) {
+    const cards = Array.from(track.children);
+    let index = 0;
+    const visible = 2; // mostra 2 por vez
 
-  function rebuildTrack() {
-    track.innerHTML = '';
-    // left clones
-    const leftClones = originalNodes.slice(-clonesPerSide).map(n => n.cloneNode(true));
-    leftClones.forEach(n => track.appendChild(n));
-    // originals
-    originalNodes.forEach(n => track.appendChild(n.cloneNode(true)));
-    // right clones
-    const rightClones = originalNodes.slice(0,clonesPerSide).map(n => n.cloneNode(true));
-    rightClones.forEach(n => track.appendChild(n));
-  }
-
-  function computeCardWidth() {
-    const first = track.querySelector('.service-card');
-    if (!first) return 360;
-    const style = getComputedStyle(first);
-    // gap handling: rely on CSS gap of container (28px) approximately
-    const gap = 28;
-    return first.offsetWidth + gap;
-  }
-
-  function setInitialPosition() {
-    const cardW = computeCardWidth();
-    currentIndex = clonesPerSide;
-    track.style.transition = 'none';
-    track.style.transform = `translateX(${-(cardW * currentIndex)}px)`;
-    void track.offsetWidth;
-    track.style.transition = '';
-  }
-
-  function moveTo(index) {
-    if (isAnimating) return;
-    isAnimating = true;
-    const cardW = computeCardWidth();
-    track.classList.add('is-animating');
-    track.style.transition = 'transform 560ms cubic-bezier(.2,.9,.2,1)';
-    track.style.transform = `translateX(${-(cardW * index)}px)`;
-    currentIndex = index;
-  }
-
-  function next() { moveTo(currentIndex + 1); }
-  function prev() { moveTo(currentIndex - 1); }
-
-  // handle snapping when hitting clones
-  track.addEventListener('transitionend', () => {
-    track.classList.remove('is-animating');
-    const cardW = computeCardWidth();
-    if (currentIndex < clonesPerSide) {
-      currentIndex += totalOriginal;
-      track.style.transition = 'none';
-      track.style.transform = `translateX(${-(cardW * currentIndex)}px)`;
-      void track.offsetWidth;
-    } else if (currentIndex >= clonesPerSide + totalOriginal) {
-      currentIndex -= totalOriginal;
-      track.style.transition = 'none';
-      track.style.transform = `translateX(${-(cardW * currentIndex)}px)`;
-      void track.offsetWidth;
+    function updateCarousel() {
+      const cardWidth = cards[0].offsetWidth + 20; // leve gap
+      const move = -(index * cardWidth);
+      track.style.transform = `translateX(${move}px)`;
+      track.style.transition = 'transform 0.6s ease';
     }
-    setTimeout(()=> { track.style.transition = ''; isAnimating = false; }, 20);
-  });
 
-  // init carousel
-  function initCarousel() {
-    rebuildTrack();
-    setTimeout(() => setInitialPosition(), 80);
+    nextBtn.addEventListener('click', () => {
+      if (index < cards.length - visible) {
+        index++;
+      } else {
+        index = 0; // loop
+      }
+      updateCarousel();
+    });
+
+    prevBtn.addEventListener('click', () => {
+      if (index > 0) {
+        index--;
+      } else {
+        index = cards.length - visible;
+      }
+      updateCarousel();
+    });
+
+    window.addEventListener('resize', updateCarousel);
+    updateCarousel();
   }
 
-  // attach events
-  if (nextBtn) nextBtn.addEventListener('click', next);
-  if (prevBtn) prevBtn.addEventListener('click', prev);
-
-  // keyboard nav
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowRight') next();
-    if (e.key === 'ArrowLeft') prev();
-  });
-
-  // rebuild on resize (keeps 2 visible; cards will shrink on small screens)
-  let resizeTimer;
-  window.addEventListener('resize', () => {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => { initCarousel(); }, 140);
-  });
-
-  initCarousel();
-
-  // smooth anchor links
-  document.querySelectorAll('a[href^="#"]').forEach(a=>{
-    a.addEventListener('click',(e)=>{
+  /* ====== Scroll suave ====== */
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', (e) => {
       const href = a.getAttribute('href');
-      if (href.length > 1) {
+      if (href && href.length > 1) {
         e.preventDefault();
         const target = document.querySelector(href);
-        if (target) target.scrollIntoView({behavior:'smooth', block:'start'});
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     });
   });
 
-  // keyboard focus styling helper
-  document.addEventListener('keyup', (e) => { if (e.key === 'Tab') document.body.classList.add('user-is-tabbing'); });
+  /* ====== FAQ toggle ====== */
+  document.querySelectorAll('.faq-question').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.parentElement;
+      const content = item.querySelector('.faq-answer');
+      const isActive = item.classList.toggle('active');
 
-});
-
-// FAQ toggle
-document.querySelectorAll('.faq-question').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const item = btn.parentElement;
-    item.classList.toggle('active');
+      if (isActive) {
+        content.style.maxHeight = content.scrollHeight + 'px';
+      } else {
+        content.style.maxHeight = '0';
+      }
+    });
   });
+
+  /* ====== Animações globais ====== */
+  const fadeEls = document.querySelectorAll('h1, h2, p, button, .service-card');
+  fadeEls.forEach(el => {
+    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    el.style.opacity = 0;
+    el.style.transform = 'translateY(20px)';
+  });
+  setTimeout(() => {
+    fadeEls.forEach(el => {
+      el.style.opacity = 1;
+      el.style.transform = 'translateY(0)';
+    });
+  }, 300);
+
+  /* ====== Botões animados ====== */
+  const buttons = document.querySelectorAll('button, .btn, a.button');
+  buttons.forEach(btn => {
+    btn.style.transition = 'all 0.25s ease';
+    btn.style.position = 'relative';
+    btn.style.overflow = 'hidden';
+
+    // Efeito “glow” suave no hover
+    btn.addEventListener('mouseenter', () => {
+      btn.style.transform = 'scale(1.04)';
+      btn.style.boxShadow = '0 0 15px rgba(155, 80, 255, 0.5)';
+    });
+
+    btn.addEventListener('mouseleave', () => {
+      btn.style.transform = 'scale(1)';
+      btn.style.boxShadow = '0 0 0 rgba(0,0,0,0)';
+    });
+
+    // Pequeno “pulse” no clique
+    btn.addEventListener('mousedown', () => {
+      btn.style.transform = 'scale(0.97)';
+    });
+
+    btn.addEventListener('mouseup', () => {
+      btn.style.transform = 'scale(1.03)';
+      setTimeout(() => (btn.style.transform = 'scale(1)'), 150);
+    });
+  });
+
 });
