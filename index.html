@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <!-- Favicon padrão -->
+<link rel="icon" type="image/png" sizes="32x32" href="favicon.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="favicon.png" />
+
+<!-- Para dispositivos Apple -->
+<link rel="apple-touch-icon" href="favicon.png" />
+
+<!-- Safari pinned tab -->
+<link rel="mask-icon" href="favicon.svg" color="#7b61ff" />
+  <title>Daniele Domingues — Estética & Transformação</title>
+  <meta name="description" content="Daniele Domingues - Preenchimento labial, Botox, Vasinhos e Emagrecimento. Agende sua transformação." />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Poppins:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Floating WhatsApp (pulsing) -->
+  <a id="whats-float" class="whats-float" href="https://wa.me/5543999539585" target="_blank" rel="noopener" aria-label="Abrir WhatsApp">
+    <span class="pulse" aria-hidden="true"></span>
+    <svg viewBox="0 0 24 24" width="34" height="34" aria-hidden="true"><path fill="currentColor" d="M20.5 3.5A11.9 11.9 0 0 0 12 .5 11.9 11.9 0 0 0 3.5 3.5 11.9 11.9 0 0 0 .5 12c0 2.05.54 4.02 1.57 5.74L.5 23.5l5.06-1.31A11.9 11.9 0 0 0 12 23.5c2.05 0 4.02-.54 5.74-1.57A11.9 11.9 0 0 0 23.5 12c0-3.18-1.24-6.16-3-8.5zM12 20a8 8 0 0 1-4.1-1.08l-.29-.17-3.01.78.8-2.92-.18-.3A8 8 0 1 1 12 20z"/></svg>
+  </a>
+
+  <!-- Header (minimal) -->
+  <header class="site-header">
+    <div class="container header-inner">
+    <nav class="nav" aria-label="Menu principal">
+  <a href="#about">Sobre</a>
+  <a href="#services">Serviços</a>
+  <a href="#faq">FAQ</a>
+  <a href="#testimonials">Depoimentos</a>
+  <a href="#contact">Contato</a>
+</nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section id="home" class="hero">
+      <div class="container hero-grid">
+        <div class="hero-left">
+          <h1 class="hero-title">Daniele Domingues<span class="accent"> — Estética & Transformação</span></h1>
+          <p class="hero-sub">Especialista em trazer resultados incriveis para clientes! Cada detalhe do seu rosto e corpo merece cuidado, segurança e sofisticação.</p>
+
+          <div class="rotator" aria-live="polite">
+            <span id="rotating-line" class="rotating-line">Maxime sua beleza.</span>
+          </div>
+
+          <div class="hero-cta">
+            <a href="#services" class="btn btn-primary">Ver Serviços</a>
+            <a href="#contact" class="btn btn-ghost">Agendar</a>
+          </div>
+        </div>
+
+        <div class="hero-right">
+          <!-- circular profile photo -->
+          <div class="profile-wrap">
+            <img src="daniele.jpg" alt="Daniele Domingues" class="profile-photo" />
+            <div class="profile-frame"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" class="section about reveal">
+      <div class="container about-inner">
+        <h2 class="section-title">Conheça a Daniele Domingues</h2>
+        <p class="lead muted">Sou enfermeira esteta com formação e experiência dedicadas à harmonização facial e corporal, e acredito profundamente que a estética vai muito além da aparência — ela é sobre autoconfiança, bem-estar e autoestima.
+Meu trabalho nasce da vontade de transformar vidas através do cuidado, unindo ciência, técnica e sensibilidade para revelar a melhor versão de cada paciente.
+
+Durante os atendimentos, valorizo o olhar individualizado: cada rosto, cada traço, cada detalhe conta uma história diferente — e é justamente essa singularidade que guia meus resultados.
+Com protocolos personalizados e produtos de alta qualidade, priorizo sempre a naturalidade, o equilíbrio estético e, principalmente, a segurança de quem confia em mim.
+
+Mais do que aplicar técnicas, eu acredito em escutar e compreender o que o paciente realmente deseja — porque quando o espelho reflete autoestima e leveza, a transformação é verdadeira.
+Aqui, cada procedimento é feito com propósito, responsabilidade e amor pelo que faço.
+
+Meu compromisso é proporcionar uma experiência acolhedora, segura e transformadora — para que você saia não apenas mais bonita, mas mais confiante, feliz e em paz com sua própria imagem.</p>
+      </div>
+    </section>
+
+    <!-- SERVICES (2 por vez carousel) -->
+    <section id="services" class="section collection">
+      <div class="container">
+        <h2 class="section-title reveal">Serviços</h2>
+        <p class="section-sub reveal muted">Alguns Serviços para Maximizar sua beleza! agendamento rápido pelo WhatsApp.</p>
+
+        <div class="carousel-wrap">
+          <button class="carousel-btn" id="prev" aria-label="Anterior">‹</button>
+
+          <div class="carousel-viewport">
+            <div class="carousel-track" id="carousel-track">
+              <!-- services (images named ready for replacement) -->
+              <article class="service-card">
+                <div class="service-media"><img src="preenchimento.jpg" alt="Preenchimento Labial"></div>
+                <div class="service-body">
+                  <h3>Preenchimento Labial</h3>
+                  <p class="muted">Lábios mais definidos e naturais — volume na medida certa para realçar seu sorriso.</p>
+                </div>
+              </article>
+
+              <article class="service-card">
+                <div class="service-media"><img src="botox.jpg" alt="Botox"></div>
+                <div class="service-body">
+                  <h3>Botox</h3>
+                  <p class="muted">Suaviza marcas e previne expressões profundas mantendo a naturalidade do seu rosto.</p>
+                </div>
+              </article>
+
+              <article class="service-card">
+                <div class="service-media"><img src="vasinhos.jpg" alt="Vasinhos"></div>
+                <div class="service-body">
+                  <h3>Vasinhos</h3>
+                  <p class="muted">Elimina vasinhos visíveis e melhora a aparência das pernas com segurança e conforto.</p>
+                </div>
+              </article>
+
+              <article class="service-card">
+                <div class="service-media"><img src="emagrecimento.jpg" alt="Emagrecimento"></div>
+                <div class="service-body">
+                  <h3>Emagrecimento</h3>
+                  <p class="muted">Protocolos personalizados para redução de medidas com saúde e acompanhamento.</p>
+                </div>
+              </article>
+            </div>
+          </div>
+
+          <button class="carousel-btn" id="next" aria-label="Próximo">›</button>
+        </div>
+
+        <div class="collection-cta">
+          <a class="btn-gold-large" id="book-cta" href="https://wa.me/5543999539585" target="_blank" rel="noopener">AGENDAR PELO WHATSAPP!</a>
+        </div>
+      </div>
+    </section>
+    <!-- FAQ -->
+<section id="faq" class="section faq reveal">
+  <div class="container">
+    <h2 class="section-title">Dúvidas Frequentes</h2>
+    <p class="section-sub muted">Tire suas dúvidas antes de agendar seu procedimento.</p>
+
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-question">O preenchimento labial deixa os lábios artificiais?</button>
+        <div class="faq-answer">
+          <p>Não. O resultado depende da técnica e da quantidade correta aplicada. O objetivo é realçar o formato natural dos lábios, não mudar completamente o rosto. Cada aplicação é personalizada conforme a anatomia e o desejo de cada pessoa.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">O botox tira a expressão do rosto?</button>
+        <div class="faq-answer">
+          <p>Quando aplicado da forma correta, o botox suaviza as linhas de expressão sem travar o rosto. O resultado é um aspecto mais descansado, natural e harmônico, respeitando sempre a individualidade facial.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">Os procedimentos são doloridos?</button>
+        <div class="faq-answer">
+          <p>Todos os procedimentos são realizados com anestesia local e produtos de alta qualidade, garantindo conforto durante a aplicação. A maioria das pacientes relata apenas um leve incômodo momentâneo.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">Quanto tempo dura o resultado?</button>
+        <div class="faq-answer">
+          <p>Depende do procedimento e do organismo de cada pessoa. Em geral, o preenchimento labial dura de 8 a 12 meses, e o botox de 4 a 6 meses. Os resultados podem ser mantidos com sessões de retoque e acompanhamento profissional.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">Posso voltar à rotina logo após o procedimento?</button>
+        <div class="faq-answer">
+          <p>Sim! A maioria dos procedimentos permite retorno imediato às atividades diárias. É importante seguir as recomendações pós-atendimento para garantir o melhor resultado e evitar inchaços ou pequenas marcas.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">Como saber qual procedimento é o ideal pra mim?</button>
+        <div class="faq-answer">
+          <p>Durante a avaliação, a Daniele analisa seu rosto e seus objetivos para indicar o procedimento mais adequado. O atendimento é personalizado para que o resultado realce a sua beleza natural com segurança e equilíbrio.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+    <!-- TESTIMONIALS -->
+    <section id="testimonials" class="section testimonials">
+      <div class="container">
+        <h2 class="section-title reveal">Depoimentos</h2>
+        <div class="depoimentos reveal">
+          <div class="depo-img">
+            <img src="depoimento1.jpg" alt="Depoimento 1">
+          </div>
+          <div class="depo-img">
+            <img src="depoimento2.jpg" alt="Depoimento 2">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="section contact">
+      <div class="container contact-inner reveal">
+        <h2>Agende sua transformação</h2>
+        <p class="muted">Clique no botão e fale direto com a Daniele pelo WhatsApp — ela responde com horários e orientações.</p>
+        <a class="buy-btn" href="https://wa.me/5543999539585" target="_blank" rel="noopener">AGENDAR PELO WHATSAPP!</a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <small class="muted">© <span id="year"></span> Daniele Domingues — Todos os direitos reservados.</small>
+      <div class="byline">Site feito por <a href="https://www.instagram.com/vlink.sites" target="_blank" rel="noopener">VLINK SITES</a></div>
+    </div>
+  </footer>
+
+  <script src="scripts.js" defer></script>
+</body>
+</html>
