@@ -81,14 +81,17 @@ body::before{
 }
 .nav{ display:flex; gap:18px; align-items:center; }
 .nav a{
-  color:var(--muted);
+  color:#222;
   text-decoration:none;
   font-weight:600;
-  padding:8px 10px;
+  margin:0px 15px;
+  position: relative;
   border-radius:8px;
   transition: color var(--transition-short), transform var(--transition-short);
+transition: color 0.3s ease;
 }
-.nav a:hover{ color:var(--text); transform: translateY(-2px); }
+
+.nav a:hover{ color:#a06cd5(--text); transform: translateY(-2px); }
 
 /* MAIN LAYOUT NOTE:
    The header is fixed; give body content top spacing to avoid overlap.
@@ -557,4 +560,29 @@ main{ padding-top:84px; }
     margin: 10px 0 0;
     margin-right: 0;
   }
+}
+
+.services-carousel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  scroll-behavior: smooth;
+}
+
+.service-card {
+  flex: 0 0 80%; /* ocupa 80% da tela pra ficar centralizado */
+  max-width: 350px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+  text-align: center;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.service-card img {
+  width: 100%;
+  height: auto;
+  border-radius: 20px 20px 0 0;
 }
