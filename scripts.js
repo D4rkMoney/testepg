@@ -1,159 +1,173 @@
-// scripts.js — versão com animações aprimoradas + botões animados
+// =============================
+// scripts.js - Daniele (FINAL & STABLE)
+// =============================
 document.addEventListener('DOMContentLoaded', () => {
 
-  /* ====== Atualiza ano ====== */
+  /* ---------- YEAR ---------- */
   const yearEl = document.getElementById('year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-  /* ====== Frases rotativas ====== */
+  /* ---------- ROTATOR ---------- */
+  const rotEl = document.getElementById('rotating-line');
   const phrases = [
     'Detalhes que realçam, resultados que surpreendem.',
-    'Técnica, sensibilidade e resultado.',
-    'Agende, transforme, encante.'
+    'Técnica, sensibilidade e harmonia.',
+    'Transforme seu reflexo — agende agora.'
   ];
-  const rotEl = document.getElementById('rotating-line');
-  let pIdx = 0;
   if (rotEl) {
-    rotEl.textContent = phrases[0];
+    let k = 0;
+    rotEl.textContent = phrases[k];
     setInterval(() => {
-      rotEl.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
       rotEl.style.opacity = 0;
       rotEl.style.transform = 'translateY(-8px)';
       setTimeout(() => {
-        pIdx = (pIdx + 1) % phrases.length;
-        rotEl.textContent = phrases[pIdx];
+        k = (k + 1) % phrases.length;
+        rotEl.textContent = phrases[k];
         rotEl.style.opacity = 1;
         rotEl.style.transform = 'translateY(0)';
-      }, 400);
-    }, 3200);
+      }, 360);
+    }, 3600);
   }
 
-  /* ====== Animação “reveal” ao rolar ====== */
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('is-visible');
-        entry.target.style.opacity = 1;
-        entry.target.style.transform = 'translateY(0)';
-        io.unobserve(entry.target);
+  /* ---------- REVEAL ON SCROLL ---------- */
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries, obs) => {
+    entries.forEach(en => {
+      if (en.isIntersecting) {
+        en.target.classList.add('is-visible');
+        obs.unobserve(en.target);
       }
     });
   }, { threshold: 0.15 });
+  reveals.forEach(r => io.observe(r));
 
-  document.querySelectorAll('.reveal').forEach(el => {
-    el.style.opacity = 0;
-    el.style.transform = 'translateY(30px)';
-    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-    io.observe(el);
-  });
+  /* ---------- MOBILE MENU (button injected if missing) ---------- */
+  const header = document.querySelector('.site-header .header-inner') || document.querySelector('.site-header');
+  const nav = document.querySelector('.nav');
+  if (header && nav) {
+    // create button only if not present
+    if (!document.querySelector('.menu-toggle')) {
+      const btn = document.createElement('button');
+      btn.className = 'menu-toggle';
+      btn.setAttribute('aria-label', 'Abrir menu');
+      btn.innerHTML = '☰';
+      header.appendChild(btn);
+      btn.addEventListener('click', () => {
+        nav.classList.toggle('open');
+        btn.classList.toggle('active');
+      });
+    } else {
+      document.querySelector('.menu-toggle').addEventListener('click', () => {
+        nav.classList.toggle('open');
+      });
+    }
+  }
 
-  /* ====== Carrossel de serviços (2 visíveis) ====== */
+  /* ---------- CAROUSEL (pixel-accurate, 2 visible) ---------- */
   const track = document.getElementById('carousel-track');
-  const nextBtn = document.getElementById('next');
   const prevBtn = document.getElementById('prev');
+  const nextBtn = document.getElementById('next');
 
-  if (track && nextBtn && prevBtn) {
-    const cards = Array.from(track.children);
+  if (track && prevBtn && nextBtn) {
+    let cards = Array.from(track.querySelectorAll('.service-card'));
     let index = 0;
-    const visible = 2; // mostra 2 por vez
+    const visibleDefault = 2;
+    let visible = visibleDefault;
+    let gap = parseFloat(getComputedStyle(track).gap) || 24;
 
-    function updateCarousel() {
-      const cardWidth = cards[0].offsetWidth + 20; // leve gap
-      const move = -(index * cardWidth);
-      track.style.transform = `translateX(${move}px)`;
-      track.style.transition = 'transform 0.6s ease';
+    function recalc() {
+      // recompute sizes after resize / images load
+      gap = parseFloat(getComputedStyle(track).gap) || 24;
+      cards = Array.from(track.querySelectorAll('.service-card'));
+      if (window.innerWidth <= 520) {
+        visible = 1;
+      } else {
+        visible = visibleDefault;
+      }
+      // clamp index
+      index = Math.max(0, Math.min(index, Math.max(0, cards.length - visible)));
+      update();
+    }
+
+    function update() {
+      if (!cards.length) return;
+      // use pixel-based transform to avoid rounding jumps
+      const cardRect = cards[0].getBoundingClientRect();
+      const cardWidth = cardRect.width;
+      const movePx = index * (cardWidth + gap);
+      track.style.transform = `translateX(-${movePx}px)`;
     }
 
     nextBtn.addEventListener('click', () => {
-      if (index < cards.length - visible) {
-        index++;
-      } else {
-        index = 0; // loop
-      }
-      updateCarousel();
+      if (index < cards.length - visible) index++;
+      else index = 0;
+      update();
     });
 
     prevBtn.addEventListener('click', () => {
-      if (index > 0) {
-        index--;
-      } else {
-        index = cards.length - visible;
-      }
-      updateCarousel();
+      if (index > 0) index--;
+      else index = Math.max(0, cards.length - visible);
+      update();
     });
 
-    window.addEventListener('resize', updateCarousel);
-    updateCarousel();
+    // Recalculate when images load (so sizes are correct)
+    window.addEventListener('resize', recalc);
+    // images inside cards might change size - listen to load
+    const imgs = track.querySelectorAll('img');
+    let loaded = 0;
+    imgs.forEach(img => {
+      if (img.complete) loaded++;
+      else img.addEventListener('load', () => { loaded++; if (loaded === imgs.length) recalc(); });
+    });
+    // initial
+    setTimeout(recalc, 80);
   }
 
-  /* ====== Scroll suave ====== */
+  /* ---------- SMOOTH NAV LINKS ---------- */
   document.querySelectorAll('a[href^="#"]').forEach(a => {
     a.addEventListener('click', (e) => {
       const href = a.getAttribute('href');
       if (href && href.length > 1) {
-        e.preventDefault();
         const target = document.querySelector(href);
-        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (target) {
+          e.preventDefault();
+          const headerOffset = 70;
+          const elementPosition = target.getBoundingClientRect().top + window.pageYOffset;
+          const offsetPosition = elementPosition - headerOffset;
+          window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+          // close mobile nav if open
+          const navEl = document.querySelector('.nav.open');
+          if (navEl) navEl.classList.remove('open');
+        }
       }
     });
   });
 
-  /* ====== FAQ toggle ====== */
+  /* ---------- FAQ toggle ---------- */
   document.querySelectorAll('.faq-question').forEach(btn => {
     btn.addEventListener('click', () => {
-      const item = btn.parentElement;
-      const content = item.querySelector('.faq-answer');
-      const isActive = item.classList.toggle('active');
-
-      if (isActive) {
-        content.style.maxHeight = content.scrollHeight + 'px';
-      } else {
-        content.style.maxHeight = '0';
+      const item = btn.closest('.faq-item');
+      if (!item) return;
+      const wasActive = item.classList.contains('active');
+      document.querySelectorAll('.faq-item.active').forEach(i => {
+        i.classList.remove('active');
+        const ans = i.querySelector('.faq-answer');
+        if (ans) ans.style.maxHeight = null;
+      });
+      if (!wasActive) {
+        item.classList.add('active');
+        const ans = item.querySelector('.faq-answer');
+        if (ans) ans.style.maxHeight = ans.scrollHeight + 'px';
       }
     });
   });
 
-  /* ====== Animações globais ====== */
-  const fadeEls = document.querySelectorAll('h1, h2, p, button, .service-card');
-  fadeEls.forEach(el => {
-    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-    el.style.opacity = 0;
-    el.style.transform = 'translateY(20px)';
-  });
-  setTimeout(() => {
-    fadeEls.forEach(el => {
-      el.style.opacity = 1;
-      el.style.transform = 'translateY(0)';
-    });
-  }, 300);
-
-  /* ====== Botões animados ====== */
-  const buttons = document.querySelectorAll('button, .btn, a.button');
-  buttons.forEach(btn => {
-    btn.style.transition = 'all 0.25s ease';
-    btn.style.position = 'relative';
-    btn.style.overflow = 'hidden';
-
-    // Efeito “glow” suave no hover
-    btn.addEventListener('mouseenter', () => {
-      btn.style.transform = 'scale(1.04)';
-      btn.style.boxShadow = '0 0 15px rgba(155, 80, 255, 0.5)';
-    });
-
-    btn.addEventListener('mouseleave', () => {
-      btn.style.transform = 'scale(1)';
-      btn.style.boxShadow = '0 0 0 rgba(0,0,0,0)';
-    });
-
-    // Pequeno “pulse” no clique
-    btn.addEventListener('mousedown', () => {
-      btn.style.transform = 'scale(0.97)';
-    });
-
-    btn.addEventListener('mouseup', () => {
-      btn.style.transform = 'scale(1.03)';
-      setTimeout(() => (btn.style.transform = 'scale(1)'), 150);
-    });
+  /* ---------- Buttons micro-animations ---------- */
+  document.querySelectorAll('.btn, .btn-gold-large, .buy-btn, .carousel-btn').forEach(btn => {
+    btn.addEventListener('mouseenter', () => btn.style.transform = 'translateY(-4px) scale(1.02)');
+    btn.addEventListener('mouseleave', () => btn.style.transform = '');
+    btn.addEventListener('mousedown', () => btn.style.transform = 'translateY(-2px) scale(.98)');
+    btn.addEventListener('mouseup', () => btn.style.transform = 'translateY(-4px) scale(1.02)');
   });
 
 });
