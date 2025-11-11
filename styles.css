@@ -453,54 +453,18 @@ main{ padding-top:84px; }
   }
 }
 
-/* ===== MENU MOBILE (CORRIGIDO) ===== */
-@media (max-width: 768px) {
-  .nav {
-    display: none;
-    flex-direction: column;
-    background: #fff;
-    position: absolute;
-    top: 60px;
-    right: 18px;
-    width: 200px;
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    padding: 10px 0;
-    animation: fadeInMenu 0.3s ease forwards;
-  }
-
-  .nav.open {
-    display: flex;
-  }
-
-  .nav a {
-    padding: 10px 16px;
-    color: var(--text);
-    font-weight: 600;
-    transition: background 0.3s ease, color 0.3s ease;
-  }
-
-  .nav a:hover {
-    background: rgba(123,97,255,0.08);
-    color: var(--accent);
-  }
-
-  /* ===== MOVER BOTÃO DO MENU PARA ESQUERDA ===== */
-.menu-toggle {
-  display: none;
-}
-
+/* ===== MENU MOBILE ABRINDO PELA ESQUERDA ===== */
 @media (max-width: 768px) {
   .menu-toggle {
     display: block;
     position: absolute;
-    left: 20px; /* antes era right: 20px */
+    left: 20px; /* botão agora à esquerda */
     top: 18px;
     background: none;
     border: none;
     font-size: 30px;
     cursor: pointer;
-    z-index: 999;
+    z-index: 1001;
     color: var(--accent, #b48a45);
     transition: transform 0.3s ease;
   }
@@ -508,12 +472,43 @@ main{ padding-top:84px; }
   .menu-toggle.active {
     transform: rotate(90deg);
   }
+
+  .nav {
+    position: fixed;
+    top: 0;
+    left: -100%; /* começa fora da tela à esquerda */
+    width: 70%;
+    height: 100%;
+    background: white;
+    box-shadow: 4px 0 16px rgba(0,0,0,0.1);
+    padding: 90px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.4rem;
+    align-items: flex-start;
+    justify-content: flex-start;
+    transition: left 0.3s ease;
+    z-index: 1000;
+  }
+
+  .nav.open {
+    left: 0; /* entra pela esquerda */
+  }
+
+  .nav a {
+    color: #000;
+    font-size: 1.1rem;
+    text-decoration: none;
+    font-weight: 600;
+  }
 }
+
 
   @keyframes fadeInMenu {
     from { opacity: 0; transform: translateY(-10px); }
     to { opacity: 1; transform: translateY(0); }
   }
-}
+
+
 
 
