@@ -485,26 +485,35 @@ main{ padding-top:84px; }
     color: var(--accent);
   }
 
+  /* ===== MOVER BOTÃO DO MENU PARA ESQUERDA ===== */
+.menu-toggle {
+  display: none;
+}
+
+@media (max-width: 768px) {
   .menu-toggle {
     display: block;
     position: absolute;
-    right: 20px;
-    top: 14px;
+    left: 20px; /* antes era right: 20px */
+    top: 18px;
     background: none;
     border: none;
-    font-size: 28px;
-    color: var(--accent);
+    font-size: 30px;
     cursor: pointer;
+    z-index: 999;
+    color: var(--accent, #b48a45);
     transition: transform 0.3s ease;
   }
 
   .menu-toggle.active {
     transform: rotate(90deg);
   }
+}
 
   @keyframes fadeInMenu {
     from { opacity: 0; transform: translateY(-10px); }
     to { opacity: 1; transform: translateY(0); }
   }
 }
+
 
