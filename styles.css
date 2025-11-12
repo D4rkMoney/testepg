@@ -231,42 +231,6 @@ main{ padding-top:84px; }
   line-height: 1.7;
 }
 
-/* Menu mobile */
-@media (max-width: 768px) {
-  .nav {
-    display: none;
-    flex-direction: column;
-    position: absolute;
-    top: 60px;
-    left: 0;
-    right: 0;
-    background: #fff;
-    border-top: 1px solid rgba(0,0,0,0.05);
-    padding: 20px 0;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.08);
-    z-index: 100;
-  }
-  .nav.active {
-    display: flex;
-  }
-  .nav a {
-    padding: 12px;
-    font-size: 18px;
-  }
-  .menu-toggle {
-    display: block;
-    position: absolute;
-    right: 20px;
-    top: 10px;
-    font-size: 28px;
-    cursor: pointer;
-    color: var(--accent);
-    background: none;
-    border: none;
-    z-index: 120;
-  }
-}
-
 /* ============ FAQ SECTION ============ */
 .faq {
   background: var(--bg-light, #fafafa);
@@ -453,19 +417,19 @@ main{ padding-top:84px; }
   }
 }
 
-/* ===== MENU MOBILE ABRINDO PELA ESQUERDA ===== */
+/* ===== MENU MOBILE — ABRINDO SUAVE E FIXO ===== */
 @media (max-width: 768px) {
+  /* Botão do menu (☰) */
   .menu-toggle {
-    display: block;
-    position: absolute;
-    left: 20px; /* botão agora à esquerda */
+    position: fixed;
     top: 18px;
+    left: 20px; /* 👉 muda pra right: 20px se quiser o botão na direita */
+    z-index: 2001;
+    font-size: 30px;
     background: none;
     border: none;
-    font-size: 30px;
-    cursor: pointer;
-    z-index: 1001;
     color: var(--accent, #b48a45);
+    cursor: pointer;
     transition: transform 0.3s ease;
   }
 
@@ -473,41 +437,57 @@ main{ padding-top:84px; }
     transform: rotate(90deg);
   }
 
+  /* Container do menu */
   .nav {
     position: fixed;
     top: 0;
-    left: -100%; /* começa fora da tela à esquerda */
+    left: -100%; /* 👉 muda pra right: -100% se quiser abrir da direita */
     width: 70%;
     height: 100%;
-    background: white;
-    box-shadow: 4px 0 16px rgba(0,0,0,0.1);
-    padding: 90px 20px 20px;
+    background: #fff;
+    box-shadow: 4px 0 20px rgba(0,0,0,0.15);
+    padding: 100px 30px 30px;
     display: flex;
     flex-direction: column;
     gap: 1.4rem;
     align-items: flex-start;
     justify-content: flex-start;
-    transition: left 0.3s ease;
-    z-index: 1000;
+    transition: left 0.35s ease;
+    z-index: 2000;
   }
 
+  /* Quando abre */
   .nav.open {
-    left: 0; /* entra pela esquerda */
+    left: 0; /* 👉 se for abrir da direita, troque pra right: 0; */
   }
 
+  /* Links */
   .nav a {
     color: #000;
-    font-size: 1.1rem;
-    text-decoration: none;
+    font-size: 1.2rem;
     font-weight: 600;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .nav a:hover {
+    color: var(--accent, #b48a45);
+  }
+
+  /* Impede qualquer rotação bizarra ou deslocamento */
+  .site-header {
+    position: relative;
+    z-index: 1;
   }
 }
+
 
 
   @keyframes fadeInMenu {
     from { opacity: 0; transform: translateY(-10px); }
     to { opacity: 1; transform: translateY(0); }
   }
+
 
 
 
